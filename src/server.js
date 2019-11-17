@@ -15,17 +15,22 @@ server.listen(port, () => {
 // Chatroom
 
 var numUsers = 0;
+let pairs = [];
+let free = [];
 
 io.on('connection', socket => {
-  var addedUser = false;
+  pairs.push(socket);
 
-  // when the client emits 'new message', this listens and executes
-  socket.on('new message', data => {
-    // we tell the client to execute 'new message'
-    socket.broadcast.emit('new message', {
-      username: socket.username,
-      message: data
-    });
+  socket.on('message', msg => {
+    pairs.map(c => c.emit('message', { user: socket.id, msg }));
+  });
+
+  socket.on('typing', () => {
+    pairs.map(c => c.emit('typing', socket.id));
+  });
+
+  socket.on('stop typing', () => {
+    pairs.map(c => c.emit('stop typing', socket.id));
   });
 
   // when the client emits 'add user', this listens and executes
@@ -46,30 +51,12 @@ io.on('connection', socket => {
     });
   });
 
-  // when the client emits 'typing', we broadcast it to others
-  socket.on('typing', () => {
-    socket.broadcast.emit('typing', {
-      username: socket.username
-    });
-  });
-
-  // when the client emits 'stop typing', we broadcast it to others
-  socket.on('stop typing', () => {
-    socket.broadcast.emit('stop typing', {
-      username: socket.username
-    });
-  });
-
   // when the user disconnects.. perform this
   socket.on('disconnect', () => {
-    if (addedUser) {
-      --numUsers;
-
-      // echo globally that this client has left
-      socket.broadcast.emit('user left', {
-        username: socket.username,
-        numUsers: numUsers
-      });
-    }
+    // echo globally that this client has left
+    socket.broadcast.emit('user left', {
+      username: socket.username,
+      numUsers: numUsers
+    });
   });
 });

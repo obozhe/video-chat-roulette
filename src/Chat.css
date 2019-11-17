@@ -1,0 +1,136 @@
+ul {
+  list-style: none;
+  word-wrap: break-word;
+  margin: 0;
+  padding: 20px;
+}
+
+.inputMessage {
+  font-size: 100%;
+}
+
+/* Messages */
+
+.chatArea {
+  height: 100vh;
+  display: grid;
+  grid-template-rows: 1fr 80px;
+  grid-template-columns: 1fr;
+  grid-gap: 0;
+}
+
+.messages {
+  width: 100%;
+  height: auto;
+  overflow-y: auto;
+  padding: 0 10px;
+}
+
+.message-wrap {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 5px;
+}
+.message-wrap.right {
+  justify-content: flex-end;
+}
+
+.message-sender {
+  font-size: medium;
+}
+
+.message-text {
+  font-size: larger;
+  margin: 0 10px;
+  padding: 10px;
+  border-radius: 10px;
+  background-color: aquamarine;
+  width: auto;
+  max-width: 90%;
+  hyphens: auto;
+}
+
+textarea {
+  border: 10px solid #000;
+  outline: none;
+  padding: 5px;
+  height: 80px;
+  width: 100%;
+  resize: none;
+  overflow: auto;
+  font-size: medium;
+}
+
+.typing {
+  margin: 10px 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  opacity: 1;
+  box-sizing: border-box;
+  height: auto;
+  transition: height 200ms 0ms, opacity 200ms 200ms;
+}
+
+.typing.hide {
+  transition: height 200ms 200ms, opacity 200ms 0ms;
+  opacity: 0;
+  height: 0;
+}
+
+.typing span {
+  color: gray;
+}
+.is-typing {
+  margin-left: 10px;
+  width: 60px;
+  justify-content: space-around;
+  display: flex;
+}
+
+.is-typing > div {
+  width: 5px;
+  height: 5px;
+  border-radius: 100%;
+  background-color: gray;
+}
+
+.o1 {
+  animation: typing 1s linear infinite;
+  animation-delay: 00s;
+}
+
+.o2 {
+  animation: typing 1s linear infinite;
+  animation-delay: 00.1s;
+}
+
+.o3 {
+  animation: typing 1s linear infinite;
+  animation-delay: 00.2s;
+}
+
+.o4 {
+  animation: typing 1s linear infinite;
+  animation-delay: 00.3s;
+}
+
+.o5 {
+  animation: typing 1s linear infinite;
+  animation-delay: 00.4s;
+}
+
+@keyframes typing {
+  0% {
+    transform: scale(1.7);
+  }
+
+  35% {
+    transform: scale(1);
+  }
+
+  75% {
+    background-color: white;
+  }
+}
