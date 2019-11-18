@@ -14,49 +14,64 @@ server.listen(port, () => {
 
 // Chatroom
 
-var numUsers = 0;
-let pairs = [];
-let free = [];
+let freeClients = new Set();
+let searchingClients = new Set();
 
 io.on('connection', socket => {
-  pairs.push(socket);
+  freeClients.add(socket.id);
 
-  socket.on('message', msg => {
-    pairs.map(c => c.emit('message', { user: socket.id, msg }));
+  socket.on('message', entry => {
+    const data = { sender: socket.id, msg: entry.msg };
+    socket.emit('message', data);
+    socket.to(entry.id).emit('message', data);
   });
 
-  socket.on('typing', () => {
-    pairs.map(c => c.emit('typing', socket.id));
+  socket.on('signal', ({ signal, toId }) => {
+    socket.to(toId).emit('signal', signal);
   });
 
-  socket.on('stop typing', () => {
-    pairs.map(c => c.emit('stop typing', socket.id));
+  socket.on('typing', toId => {
+    socket.emit('typing', socket.id);
+    socket.to(toId).emit('typing', socket.id);
   });
 
-  // when the client emits 'add user', this listens and executes
-  socket.on('add user', username => {
-    if (addedUser) return;
-
-    // we store the username in the socket session for this client
-    socket.username = username;
-    ++numUsers;
-    addedUser = true;
-    socket.emit('login', {
-      numUsers: numUsers
-    });
-    // echo globally (all clients) that a person has connected
-    socket.broadcast.emit('user joined', {
-      username: socket.username,
-      numUsers: numUsers
-    });
+  socket.on('stop typing', toId => {
+    socket.emit('stop typing');
+    socket.to(toId).emit('stop typing');
   });
 
-  // when the user disconnects.. perform this
+  socket.on('searching', toId => {
+    if (toId) {
+      socket.to(toId).emit('stranger disconnected');
+      socket.emit('stranger disconnected');
+    } else {
+      freeClients.delete(socket.id);
+    }
+    searchingClients.add(socket.id);
+    const inSearch = Array.from(searchingClients);
+    if (inSearch.length >= 2) {
+      const toId = inSearch[0] !== socket.id ? inSearch[0] : inSearch[1];
+      socket.emit('connected', { toId, initiator: false });
+      socket.to(toId).emit('connected', { toId: socket.id, initiator: true });
+      searchingClients.delete(socket.id);
+      searchingClients.delete(toId);
+    } else {
+      console.log('There are not enough users');
+    }
+  });
+
+  socket.on('stop', toId => {
+    freeClients.add(socket.id);
+    if (toId) {
+      socket.to(toId).emit('stranger disconnected');
+      socket.emit('stranger disconnected');
+    } else {
+      searchingClients.delete(socket.id);
+    }
+  });
+
   socket.on('disconnect', () => {
-    // echo globally that this client has left
-    socket.broadcast.emit('user left', {
-      username: socket.username,
-      numUsers: numUsers
-    });
+    if (freeClients.has(socket.id)) return freeClients.delete(socket.id);
+    if (searchingClients.has(socket.id)) return searchingClients.delete(socket.id);
   });
 });

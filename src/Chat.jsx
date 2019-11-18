@@ -1,16 +1,19 @@
 import React from 'react';
-import socket from './socket';
+import Send from '@material-ui/icons/Send';
+
 import './Chat.css';
 
 export default class Chatroom extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.state = {
       messages: [],
       input: '',
-      client: socket(),
-      typing: false
+      client: this.props.client,
+      typing: false,
+      toId: '',
+      initiator: null
     };
 
     this.onInput = this.onInput.bind(this);
@@ -18,13 +21,16 @@ export default class Chatroom extends React.Component {
     this.onMessageReceived = this.onMessageReceived.bind(this);
     this.onTyping = this.onTyping.bind(this);
     this.onStopTyping = this.onStopTyping.bind(this);
+    this.onConnected = this.onConnected.bind(this);
+    this.onStrangerDisconnect = this.onStrangerDisconnect.bind(this);
 
     // this.updateChatHistory = this.updateChatHistory.bind(this);
     this.scrollChatToBottom = this.scrollChatToBottom.bind(this);
   }
 
   componentDidMount() {
-    this.state.client.registerHandler(this.onMessageReceived, this.onTyping, this.onStopTyping);
+    this.state.client.registerChatHandler(this.onMessageReceived, this.onTyping, this.onStopTyping);
+    this.state.client.registerCommonHandler(this.onConnected, this.onStrangerDisconnect);
     this.scrollChatToBottom();
   }
 
@@ -44,6 +50,14 @@ export default class Chatroom extends React.Component {
     }
   }
 
+  onConnected({ toId, initiator }) {
+    this.setState({ toId, initiator });
+  }
+
+  onStrangerDisconnect() {
+    this.setState({ toId: '', messages: [], input: '' });
+  }
+
   componentDidUpdate() {
     this.scrollChatToBottom();
   }
@@ -54,12 +68,12 @@ export default class Chatroom extends React.Component {
 
   onInput(e) {
     if (!this.state.typing) {
-      this.state.client.startTyping();
+      this.state.client.startTyping(this.state.toId);
     }
     const value = e.target.value;
     setTimeout(() => {
       if (value === this.state.input) {
-        this.state.client.stopTyping();
+        this.state.client.stopTyping(this.state.toId);
       }
     }, 700);
     this.setState({
@@ -68,10 +82,10 @@ export default class Chatroom extends React.Component {
   }
 
   onSendMessage() {
-    if (!this.state.input) return;
-    this.state.client.message(this.state.input);
+    if (!this.state.input || !this.state.toId) return;
+    this.state.client.message({ id: this.state.toId, msg: this.state.input });
     this.setState({ input: '' });
-    this.state.client.stopTyping();
+    this.state.client.stopTyping(this.state.toId);
   }
 
   onEnterDown(e) {
@@ -84,7 +98,7 @@ export default class Chatroom extends React.Component {
   }
 
   renderMessage(msg, i) {
-    const user = msg.user === this.state.client.getId() ? 'You' : 'Stranger';
+    const user = msg.sender === this.state.client.getId() ? 'You' : 'Stranger';
     if (user === 'You') {
       return (
         <li key={i} className="message-wrap right">
@@ -104,7 +118,7 @@ export default class Chatroom extends React.Component {
 
   render() {
     return (
-      <div className="chatArea">
+      <div className="chat">
         <div
           className="messages"
           ref={panel => {
@@ -124,20 +138,23 @@ export default class Chatroom extends React.Component {
                   <div className="o1"></div>
                   <div className="o2"></div>
                   <div className="o3"></div>
-                  <div className="o4"></div>
-                  <div className="o5"></div>
                 </div>
               </div>
             </li>
           </ul>
         </div>
-        <textarea
-          type="text"
-          wrap="hard"
-          onChange={this.onInput}
-          value={this.state.input}
-          onKeyPress={e => (e.key === 'Enter' ? this.onEnterDown(e) : null)}
-        />
+        <div className="input">
+          <textarea
+            type="text"
+            wrap="hard"
+            onChange={this.onInput}
+            value={this.state.input}
+            onKeyPress={e => (e.key === 'Enter' ? this.onEnterDown(e) : null)}
+          />
+          <button onClick={() => this.onSendMessage()}>
+            <Send />
+          </button>
+        </div>
       </div>
     );
   }

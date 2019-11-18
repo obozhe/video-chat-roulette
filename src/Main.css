@@ -1,0 +1,83 @@
+.main {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr 100px;
+  grid-gap: 0;
+}
+
+.video-area {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+  grid-gap: 0;
+}
+
+.video video {
+  max-width: 100%;
+  max-height: 100%;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.video {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.video.local,
+.video.remote {
+}
+
+.buttons-area {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.buttons-area > button {
+  margin: 0 10px;
+  padding: 15px;
+  outline: none;
+  border: none;
+  border-radius: 10px;
+  transition: 0.2s;
+  cursor: pointer;
+  height: 70px;
+  width: 100px;
+  font-size: 100%;
+}
+
+.buttons-area .next {
+  background-color: #51fd6d;
+}
+.buttons-area .next svg {
+  height: 90%;
+  width: 90%;
+}
+
+.buttons-area > button:hover {
+  transform: scale(1.01);
+  box-shadow: 2px 2px 1px #263346;
+}
+
+.buttons-area > button:active {
+  transform: scale(1.01);
+  box-shadow: 2px 2px 1px #263346;
+}
+
+.circle {
+  margin-left: 10px;
+  margin-top: 4px;
+  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+}
+
+span {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}

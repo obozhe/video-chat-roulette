@@ -5,24 +5,18 @@ ul {
   padding: 20px;
 }
 
-.inputMessage {
-  font-size: 100%;
-}
-
-/* Messages */
-
-.chatArea {
-  height: 100vh;
+.chat {
   display: grid;
   grid-template-rows: 1fr 80px;
   grid-template-columns: 1fr;
   grid-gap: 0;
+  overflow: hidden;
 }
 
 .messages {
   width: 100%;
   height: auto;
-  overflow-y: auto;
+  overflow: auto;
   padding: 0 10px;
 }
 
@@ -45,21 +39,63 @@ ul {
   margin: 0 10px;
   padding: 10px;
   border-radius: 10px;
-  background-color: aquamarine;
+  color: #fafafa;
+  background-color: #263346;
   width: auto;
   max-width: 90%;
   hyphens: auto;
 }
 
-textarea {
-  border: 10px solid #000;
-  outline: none;
+.input {
   padding: 5px;
   height: 80px;
+  display: flex;
+  flex-direction: row;
+}
+
+.input > * {
+  border: 5px solid #263346;
+  height: 70px;
+  padding: 5px;
+  outline: none;
+  transition: 0.2s;
+}
+
+.input textarea {
+  border-radius: 10px 0 0 10px;
   width: 100%;
   resize: none;
   overflow: auto;
   font-size: medium;
+  border-right: none;
+}
+
+.input textarea:focus {
+  box-shadow: 0 0 7px rgba(0, 0, 0, 0.5) inset;
+}
+
+.input button {
+  border-radius: 0 10px 10px 0;
+  border-left: none;
+  background-color: #263346;
+  width: 80px;
+}
+
+.input button:hover {
+  background-color: #364863;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
+  cursor: pointer;
+}
+
+.input button:active {
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.5) inset;
+  cursor: pointer;
+}
+
+.input svg {
+  height: 70%;
+  width: 70%;
+  color: #fafafa;
 }
 
 .typing {
@@ -84,7 +120,7 @@ textarea {
 }
 .is-typing {
   margin-left: 10px;
-  width: 60px;
+  width: 40px;
   justify-content: space-around;
   display: flex;
 }
@@ -111,19 +147,9 @@ textarea {
   animation-delay: 00.2s;
 }
 
-.o4 {
-  animation: typing 1s linear infinite;
-  animation-delay: 00.3s;
-}
-
-.o5 {
-  animation: typing 1s linear infinite;
-  animation-delay: 00.4s;
-}
-
 @keyframes typing {
   0% {
-    transform: scale(1.7);
+    transform: scale(1.5);
   }
 
   35% {

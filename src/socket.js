@@ -23,10 +23,19 @@ export default function() {
     return socket.id;
   }
 
-  function registerHandler(onMessageReceived, onTyping, onStopTyping) {
+  function registerChatHandler(onMessageReceived, onTyping, onStopTyping) {
     socket.on('message', onMessageReceived);
     socket.on('typing', onTyping);
     socket.on('stop typing', onStopTyping);
+  }
+
+  function registerCommonHandler(onConnected, onStrangerDisconnect) {
+    socket.on('connected', onConnected);
+    socket.on('stranger disconnected', onStrangerDisconnect);
+  }
+
+  function registerPeerSignal(onSignal) {
+    socket.on('signal', onSignal);
   }
 
   function unregisterHandler() {
@@ -37,20 +46,37 @@ export default function() {
     socket.emit('message', msg);
   }
 
-  function startTyping() {
-    socket.emit('typing', socket.id);
+  function startTyping(toId) {
+    socket.emit('typing', toId);
   }
 
-  function stopTyping() {
-    socket.emit('stop typing', socket.id);
+  function stopTyping(toId) {
+    socket.emit('stop typing', toId);
+  }
+
+  function startSearch(toId) {
+    socket.emit('searching', toId);
+  }
+
+  function stop(toId) {
+    socket.emit('stop', toId);
+  }
+
+  function sendSignal(signal) {
+    socket.emit('signal', signal);
   }
 
   return {
     getId,
     message,
-    registerHandler,
+    registerChatHandler,
+    registerCommonHandler,
+    registerPeerSignal,
     unregisterHandler,
     startTyping,
-    stopTyping
+    stopTyping,
+    startSearch,
+    stop,
+    sendSignal
   };
 }
