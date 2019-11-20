@@ -9,10 +9,7 @@ server.listen(port, () => {
   console.log('Server listening at port %d', port);
 });
 
-// Routing
-//app.use(express.static(path.join(__dirname, 'public')));
-
-// Chatroom
+app.use(express.static(path.join(__dirname, 'build')));
 
 let freeClients = new Set();
 let searchingClients = new Set();
@@ -56,13 +53,10 @@ io.on('connection', socket => {
       socket.to(toId).emit('connected', { toId: socket.id, initiator: true });
       searchingClients.delete(socket.id);
       searchingClients.delete(toId);
-    } else {
-      console.log('There are not enough users');
     }
   });
 
   socket.on('stop', toId => {
-    console.log(toId);
     freeClients.add(socket.id);
     if (toId) {
       socket.to(toId).emit('stranger disconnected');
@@ -80,6 +74,5 @@ io.on('connection', socket => {
     if (freeClients.has(socket.id)) return freeClients.delete(socket.id);
     if (searchingClients.has(socket.id)) return searchingClients.delete(socket.id);
     socket.broadcast.emit('online', io.sockets.clients().server.eio.clientsCount);
-    console.log('ss');
   });
 });

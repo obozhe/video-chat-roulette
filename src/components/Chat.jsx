@@ -1,7 +1,7 @@
 import React from 'react';
 import Send from '@material-ui/icons/Send';
 
-import './Chat.css';
+import './../css/Chat.css';
 
 export default class Chatroom extends React.Component {
   constructor(props) {
@@ -35,6 +35,15 @@ export default class Chatroom extends React.Component {
     chat.style.height = `${chat.offsetHeight}px`;
   }
 
+  componentWillUnmount() {
+    this.state.client.unRegisterCommonHandler();
+    this.state.client.unRegisterChatHandler();
+  }
+
+  componentDidUpdate() {
+    this.scrollChatToBottom();
+  }
+
   onMessageReceived(msg) {
     this.setState({ messages: [...this.state.messages, msg] });
   }
@@ -57,14 +66,6 @@ export default class Chatroom extends React.Component {
 
   onStrangerDisconnect() {
     this.setState({ toId: '', messages: [], input: '' });
-  }
-
-  componentDidUpdate() {
-    this.scrollChatToBottom();
-  }
-
-  componentWillUnmount() {
-    this.state.client.unregisterHandler();
   }
 
   onInput(e) {

@@ -1,11 +1,13 @@
 .chat {
   height: 100%;
-  padding: 0 5px;
+  margin: 0 5px;
   display: grid;
   grid-template-rows: 1fr 60px;
   grid-template-columns: 1fr;
   grid-gap: 0;
   overflow: hidden;
+  border: 5px solid #263346;
+  border-radius: 10px;
 }
 
 .messages {
@@ -18,7 +20,7 @@ ul {
   list-style: none;
   word-wrap: break-word;
   margin: 0;
-  padding: 20px;
+  padding: 0 10px;
 }
 
 .message-wrap {
@@ -32,11 +34,11 @@ ul {
 }
 
 .message-sender {
-  font-size: medium;
+  font-size: small;
 }
 
 .message-text {
-  font-size: larger;
+  font-size: medium;
   margin: 0 10px;
   padding: 10px;
   border-radius: 10px;
@@ -51,6 +53,7 @@ ul {
   height: 60px;
   display: flex;
   flex-direction: row;
+  margin: 5px -5px;
 }
 
 .input > * {

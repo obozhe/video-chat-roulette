@@ -1,23 +1,10 @@
 const io = require('socket.io-client');
 
 export default function() {
-  const socket = io.connect('http://localhost:3000');
+  // const socket = io.connect('http://localhost:3000');
+  const socket = io();
+
   socket.on('error', err => console.log('socket error:', err));
-
-  // socket.on('disconnect', () => {
-  //   log('you have been disconnected');
-  // });
-
-  // socket.on('reconnect', () => {
-  //   log('you have been reconnected');
-  //   if (username) {
-  //     socket.emit('add user', username);
-  //   }
-  // });
-
-  // socket.on('reconnect_error', () => {
-  //   log('attempt to reconnect has failed');
-  // });
 
   function getId() {
     return socket.id;
@@ -42,12 +29,19 @@ export default function() {
     socket.on('online', onOnline);
   }
 
-  function unRegisterPeerSignal(onSignal) {
-    socket.off('signal', onSignal);
+  function unRegisterChatHandler() {
+    socket.off('message');
+    socket.off('typing');
+    socket.off('stop typing');
   }
 
-  function unregisterHandler() {
-    socket.off('message');
+  function unRegisterCommonHandler() {
+    socket.off('connected');
+    socket.off('stranger disconnected');
+  }
+
+  function unRegisterPeerSignal(onSignal) {
+    socket.off('signal', onSignal);
   }
 
   function message(msg) {
@@ -84,8 +78,9 @@ export default function() {
     registerCommonHandler,
     registerPeerSignal,
     registerOnlineUsers,
+    unRegisterChatHandler,
+    unRegisterCommonHandler,
     unRegisterPeerSignal,
-    unregisterHandler,
     startTyping,
     stopTyping,
     startSearch,

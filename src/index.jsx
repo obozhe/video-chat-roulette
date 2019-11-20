@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import socket from './socket';
-import Main from './Main';
-import './index.css';
+import Main from './components/Main';
+import './css/index.css';
 
 class App extends React.Component {
   constructor() {

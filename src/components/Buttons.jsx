@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
-import './Buttons.css';
 import Next from '@material-ui/icons/SkipNext';
 
-export default class Buttons extends Component {
-  constructor(props) {
-    super(props);
-  }
+import './../css/Buttons.css';
 
+export default class Buttons extends Component {
   render() {
     return (
       <div className="left">
@@ -18,7 +15,7 @@ export default class Buttons extends Component {
           >
             {this.props.searching || this.props.connected ? 'Stop' : 'Start'}
           </button>
-          {this.props.connected && (
+          {(this.props.connected || this.props.disconnected) && (
             <button className="next" onClick={this.props.next}>
               <Next />
             </button>

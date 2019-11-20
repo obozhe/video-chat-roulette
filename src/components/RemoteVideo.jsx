@@ -1,31 +1,24 @@
 import React from 'react';
 import Peer from 'simple-peer';
 
-import './Main.css';
-
 export default class RemoteVideo extends React.Component {
   constructor(props) {
     super(props);
 
+    this.state = { stream: false };
+
     this.peer = null;
     this.bindProps = () => {
-      this.peer.on('error', this.onError);
       this.peer.on('signal', this.onSignal);
       this.peer.on('stream', this.onStream);
-      this.peer.on('data', raw => this.onData(JSON.stringify(raw.toString())));
-      this.peer.on('connect', this.onConnect);
     };
     this.onSignal = this.onSignal.bind(this);
-    this.onConnect = this.onConnect.bind(this);
     this.onStream = this.onStream.bind(this);
-    this.onError = this.onError.bind(this);
 
     this.remoteVideo = React.createRef();
   }
 
   componentDidMount() {
-    this.remoteVideo.current.height = this.props.dimensions.height;
-    this.remoteVideo.current.width = this.props.dimensions.width;
     this.peer = new Peer({ initiator: this.props.initiator, stream: this.props.stream });
     this.bindProps();
     const peer = this.peer;
@@ -39,7 +32,6 @@ export default class RemoteVideo extends React.Component {
   }
 
   componentWillUnmount() {
-    console.log('DESTROYED');
     this.props.client.unRegisterPeerSignal();
     this.peer.destroy();
   }
@@ -48,12 +40,8 @@ export default class RemoteVideo extends React.Component {
     this.props.client.sendSignal({ toId: this.props.toId, signal: data });
   }
 
-  onConnect() {
-    console.log('CONNECT');
-  }
-
   onStream(stream) {
-    console.log('GOT STREAM!!!');
+    this.setState({ stream: true });
     if ('srcObject' in this.remoteVideo.current) {
       this.remoteVideo.current.srcObject = stream;
     } else {
@@ -61,11 +49,30 @@ export default class RemoteVideo extends React.Component {
     }
   }
 
-  onError(err) {
-    console.log('PEER ERROR', err);
-  }
-
   render() {
-    return <video ref={this.remoteVideo} height="100%" autoPlay></video>;
+    return (
+      <div
+        style={{
+          height: '100%',
+          width: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          textAlign: 'center',
+          color: '#fafafa'
+        }}
+      >
+        {this.state.stream ? (
+          <video ref={this.remoteVideo} height="100%" autoPlay></video>
+        ) : (
+          <h1>
+            You are connected but stranger don't want you to see him{' '}
+            <span role="img" aria-label="surprised">
+              &#128546;
+            </span>
+          </h1>
+        )}
+      </div>
+    );
   }
 }
