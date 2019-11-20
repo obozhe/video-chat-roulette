@@ -1,15 +1,31 @@
-var express = require('express');
-var app = express();
-var path = require('path');
-var server = require('http').createServer(app);
-var io = require('socket.io')(server);
-var port = process.env.PORT || 3000;
+const fs = require('fs');
+const express = require('express');
+const app = express();
+const path = require('path');
+const server = require('http').createServer(app);
+const io = require('socket.io')(server);
+const port = process.env.PORT || 3000;
 
 server.listen(port, () => {
   console.log('Server listening at port %d', port);
 });
 
-app.use(express.static(path.join(__dirname, 'build')));
+app.use(express.static(path.join(__dirname, '/../build')));
+
+app.get('/', function(req, res) {
+  res.sendFile(path.join(__dirname, '/../build/index.html'));
+});
+
+function start(resp) {
+  resp.writeHead(200, {
+    'Content-Type': 'text/html'
+  });
+  fs.readFile('./build/index.html', 'utf8', function(err, data) {
+    if (err) throw err;
+    resp.write(data);
+    resp.end();
+  });
+}
 
 let freeClients = new Set();
 let searchingClients = new Set();
