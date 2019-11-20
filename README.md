@@ -1,6 +1,6 @@
 # Websocket and P2P based videochat roulette built with react.js, node.js, socket.io and simple-peer
 
-Live [demo](https://dashboard.heroku.com/apps/video-chat-roulette/deploy/github) on Heroku
+Live [demo](https://video-chat-roulette.herokuapp.com) on Heroku
 
 ## Installation instruction
 
