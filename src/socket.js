@@ -2,7 +2,7 @@ const io = require('socket.io-client');
 
 export default function() {
   // const socket = io.connect('http://localhost:3000');
-  const socket = io('https://video-chat-roulette.drednes.now.sh');
+  const socket = io();
 
   socket.on('error', err => console.log('socket error:', err));
 

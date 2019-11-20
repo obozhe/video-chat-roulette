@@ -9,9 +9,7 @@ server.listen(port, () => {
   console.log('Server listening at port %d', port);
 });
 
-app
-  .use(express.static(path.join(__dirname, '/../build')))
-  .get('/', () => res.sendFile(path.join(__dirname, '/../build/index.html')));
+app.use(express.static(path.join(__dirname, '/../build')));
 
 let freeClients = new Set();
 let searchingClients = new Set();
