@@ -28,8 +28,7 @@
 }
 
 .video {
-  height: 100%;
-  overflow: hidden;
+  height: fit-content;
 }
 
 .bottom-area {

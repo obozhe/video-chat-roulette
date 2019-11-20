@@ -26,18 +26,13 @@ export default class Main extends React.Component {
   }
 
   componentDidMount() {
-    console.log(document.getElementById('local').offsetHeight);
-
     const dimensions = {
       width: document.getElementById('local').offsetWidth,
       height: document.getElementById('local').offsetHeight
     };
     this.dimensions = dimensions;
-    console.log(dimensions);
     this.localVideo.current.width = dimensions.width;
     this.localVideo.current.height = dimensions.height;
-    console.log(this.localVideo.current.width, this.localVideo.current.height);
-    console.log(document.getElementById('local').offsetHeight);
 
     this.state.client.registerCommonHandler(this.onConnected, this.onStrangerDisconnect);
     const gotMedia = stream => {

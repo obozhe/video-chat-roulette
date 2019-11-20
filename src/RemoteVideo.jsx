@@ -15,10 +15,6 @@ export default class RemoteVideo extends React.Component {
       this.peer.on('data', raw => this.onData(JSON.stringify(raw.toString())));
       this.peer.on('connect', this.onConnect);
     };
-    this.onSignal = this.onSignal.bind(this);
-    this.onConnect = this.onConnect.bind(this);
-    this.onStream = this.onStream.bind(this);
-    this.onError = this.onError.bind(this);
 
     this.remoteVideo = React.createRef();
   }

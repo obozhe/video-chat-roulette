@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import './Buttons.css';
 import Next from '@material-ui/icons/SkipNext';
+import './Buttons.css';
 
 export default class Buttons extends Component {
   constructor(props) {
