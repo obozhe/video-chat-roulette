@@ -38,6 +38,6 @@ npm install
 npm run production
 ```
 
-run server without building: ```bash npm start ```
+run server without building: ``` npm start ```
 
 3. Open new clients on localhost:3000.
