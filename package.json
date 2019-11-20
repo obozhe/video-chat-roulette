@@ -14,7 +14,6 @@
   },
   "scripts": {
     "start": "node src/server.js",
-    "production": "npm run build && node src/server.js",
     "client": "react-scripts start",
     "server": "node src/devServer.js",
     "build": "react-scripts build",

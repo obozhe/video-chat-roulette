@@ -1,30 +1,8 @@
-# Websocket and P2P based videocaht roulette built with , react.js, node.js, socket.io and simple-peer
+# Websocket and P2P based videochat roulette built with react.js, node.js, socket.io and simple-peer
 
-# Installation instruction
+Live [demo](https://dashboard.heroku.com/apps/video-chat-roulette/deploy/github) on Heroku
 
-## Development run
-
-1. Install.
-
-```bash
-npm install
-```
-
-2. Run the application server.
-
-```bash
-npm run server
-```
-
-3. Run the client.
-
-```bash
-npm run client
-```
-
-4. Open new clients on localhost:3001. Server is running on localhost:3000.
-
-## Production run
+## Installation instruction
 
 1. Install.
 
@@ -32,12 +10,16 @@ npm run client
 npm install
 ```
 
-2. Build static and run the application server.
+2. Build static.
 
 ```bash
-npm run production
+npm run build
 ```
 
-run server without building: ``` npm start ```
+3. Run server.
 
-3. Open new clients on localhost:3000.
+```bash
+npm start
+```
+
+4. Open new clients on localhost:3000.
