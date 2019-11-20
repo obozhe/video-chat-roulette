@@ -1,4 +1,3 @@
-const fs = require('fs');
 const express = require('express');
 const app = express();
 const path = require('path');
@@ -10,22 +9,9 @@ server.listen(port, () => {
   console.log('Server listening at port %d', port);
 });
 
-app.use(express.static(path.join(__dirname, '/../build')));
-
-app.get('/', function(req, res) {
-  res.sendFile(path.join(__dirname, '/../build/index.html'));
-});
-
-function start(resp) {
-  resp.writeHead(200, {
-    'Content-Type': 'text/html'
-  });
-  fs.readFile('./build/index.html', 'utf8', function(err, data) {
-    if (err) throw err;
-    resp.write(data);
-    resp.end();
-  });
-}
+app
+  .use(express.static(path.join(__dirname, '/../build')))
+  .get('/', () => res.sendFile(path.join(__dirname, '/../build/index.html')));
 
 let freeClients = new Set();
 let searchingClients = new Set();
