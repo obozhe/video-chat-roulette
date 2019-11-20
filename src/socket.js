@@ -1,8 +1,11 @@
 const io = require('socket.io-client');
 
 export default function() {
-  // const socket = io.connect('http://localhost:3000');
-  const socket = io();
+  let socket = io(); //static
+  if (!socket.connected) {
+    socket.disconnect();
+    socket = io.connect('http://localhost:3000'); //development
+  }
 
   socket.on('error', err => console.log('socket error:', err));
 
