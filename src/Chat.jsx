@@ -31,7 +31,8 @@ export default class Chatroom extends React.Component {
   componentDidMount() {
     this.state.client.registerChatHandler(this.onMessageReceived, this.onTyping, this.onStopTyping);
     this.state.client.registerCommonHandler(this.onConnected, this.onStrangerDisconnect);
-    this.scrollChatToBottom();
+    const chat = document.getElementById('chat');
+    chat.style.height = `${chat.offsetHeight}px`;
   }
 
   onMessageReceived(msg) {
@@ -118,7 +119,7 @@ export default class Chatroom extends React.Component {
 
   render() {
     return (
-      <div className="chat">
+      <div id="chat" className="chat">
         <div
           className="messages"
           ref={panel => {
@@ -144,9 +145,8 @@ export default class Chatroom extends React.Component {
           </ul>
         </div>
         <div className="input">
-          <textarea
+          <input
             type="text"
-            wrap="hard"
             onChange={this.onInput}
             value={this.state.input}
             onKeyPress={e => (e.key === 'Enter' ? this.onEnterDown(e) : null)}

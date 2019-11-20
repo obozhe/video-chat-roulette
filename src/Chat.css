@@ -1,13 +1,8 @@
-ul {
-  list-style: none;
-  word-wrap: break-word;
-  margin: 0;
-  padding: 20px;
-}
-
 .chat {
+  height: 100%;
+  padding: 0 5px;
   display: grid;
-  grid-template-rows: 1fr 80px;
+  grid-template-rows: 1fr 60px;
   grid-template-columns: 1fr;
   grid-gap: 0;
   overflow: hidden;
@@ -16,8 +11,14 @@ ul {
 .messages {
   width: 100%;
   height: auto;
-  overflow: auto;
-  padding: 0 10px;
+  overflow: scroll;
+}
+
+ul {
+  list-style: none;
+  word-wrap: break-word;
+  margin: 0;
+  padding: 20px;
 }
 
 .message-wrap {
@@ -47,30 +48,28 @@ ul {
 }
 
 .input {
-  padding: 5px;
-  height: 80px;
+  height: 60px;
   display: flex;
   flex-direction: row;
 }
 
 .input > * {
   border: 5px solid #263346;
-  height: 70px;
+  height: 100%;
   padding: 5px;
   outline: none;
   transition: 0.2s;
 }
 
-.input textarea {
+.input input {
   border-radius: 10px 0 0 10px;
   width: 100%;
   resize: none;
-  overflow: auto;
   font-size: medium;
   border-right: none;
 }
 
-.input textarea:focus {
+.input input:focus {
   box-shadow: 0 0 7px rgba(0, 0, 0, 0.5) inset;
 }
 
@@ -83,12 +82,11 @@ ul {
 
 .input button:hover {
   background-color: #364863;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
   cursor: pointer;
 }
 
 .input button:active {
-  box-shadow: 0 0 3px rgba(0, 0, 0, 0.5) inset;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 1) inset;
   cursor: pointer;
 }
 

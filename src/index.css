@@ -18,12 +18,13 @@ body {
   height: 100%;
   margin: 0;
   padding: 0;
+  background-color: #263346;
 }
 
 .root {
   height: 100vh;
-  display: grid;
-  grid-template-rows: 2fr 1fr;
-  grid-template-columns: 1fr;
-  grid-gap: 0;
+  padding: 10px;
+  border: 10px solid #263346;
+  border-radius: 20px;
+  background-color: #fafafa;
 }

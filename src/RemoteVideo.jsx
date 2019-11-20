@@ -19,9 +19,13 @@ export default class RemoteVideo extends React.Component {
     this.onConnect = this.onConnect.bind(this);
     this.onStream = this.onStream.bind(this);
     this.onError = this.onError.bind(this);
+
+    this.remoteVideo = React.createRef();
   }
 
   componentDidMount() {
+    this.remoteVideo.current.height = this.props.dimensions.height;
+    this.remoteVideo.current.width = this.props.dimensions.width;
     this.peer = new Peer({ initiator: this.props.initiator, stream: this.props.stream });
     this.bindProps();
     const peer = this.peer;
@@ -36,7 +40,8 @@ export default class RemoteVideo extends React.Component {
 
   componentWillUnmount() {
     console.log('DESTROYED');
-    //this.peer.destroy();
+    this.props.client.unRegisterPeerSignal();
+    this.peer.destroy();
   }
 
   onSignal(data) {
@@ -49,11 +54,10 @@ export default class RemoteVideo extends React.Component {
 
   onStream(stream) {
     console.log('GOT STREAM!!!');
-    var video = document.querySelector('video');
-    if ('srcObject' in video) {
-      video.srcObject = stream;
+    if ('srcObject' in this.remoteVideo.current) {
+      this.remoteVideo.current.srcObject = stream;
     } else {
-      video.src = window.URL.createObjectURL(stream);
+      this.remoteVideo.current.src = window.URL.createObjectURL(stream);
     }
   }
 
@@ -62,6 +66,6 @@ export default class RemoteVideo extends React.Component {
   }
 
   render() {
-    return <video height="100%" autoPlay></video>;
+    return <video ref={this.remoteVideo} height="100%" autoPlay></video>;
   }
 }

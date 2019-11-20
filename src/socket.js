@@ -38,6 +38,14 @@ export default function() {
     socket.on('signal', onSignal);
   }
 
+  function registerOnlineUsers(onOnline) {
+    socket.on('online', onOnline);
+  }
+
+  function unRegisterPeerSignal(onSignal) {
+    socket.off('signal', onSignal);
+  }
+
   function unregisterHandler() {
     socket.off('message');
   }
@@ -65,6 +73,9 @@ export default function() {
   function sendSignal(signal) {
     socket.emit('signal', signal);
   }
+  function getOnlineUsers(cb) {
+    socket.emit('online', cb);
+  }
 
   return {
     getId,
@@ -72,11 +83,14 @@ export default function() {
     registerChatHandler,
     registerCommonHandler,
     registerPeerSignal,
+    registerOnlineUsers,
+    unRegisterPeerSignal,
     unregisterHandler,
     startTyping,
     stopTyping,
     startSearch,
     stop,
-    sendSignal
+    sendSignal,
+    getOnlineUsers
   };
 }

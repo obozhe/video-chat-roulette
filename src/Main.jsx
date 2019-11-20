@@ -1,6 +1,9 @@
 import React from 'react';
-import Next from '@material-ui/icons/SkipNext';
+import Buttons from './Buttons';
 import RemoteVideo from './RemoteVideo';
+import RemoteVideoPlaceholder from './RemoteVideoPlaceholder';
+import Chat from './Chat';
+
 import './Main.css';
 
 export default class Main extends React.Component {
@@ -18,19 +21,26 @@ export default class Main extends React.Component {
     this.onStrangerDisconnect = this.onStrangerDisconnect.bind(this);
 
     this.stream = null;
+    this.dimensions = {};
     this.localVideo = React.createRef();
   }
 
   componentDidMount() {
-    this.state.client.registerCommonHandler(this.onConnected, this.onStrangerDisconnect);
+    const dimensions = {
+      width: document.getElementById('local').offsetWidth,
+      height: document.getElementById('local').offsetHeight
+    };
+    this.dimensions = dimensions;
+    this.localVideo.current.width = dimensions.width;
+    this.localVideo.current.height = dimensions.height;
 
+    this.state.client.registerCommonHandler(this.onConnected, this.onStrangerDisconnect);
     const gotMedia = stream => {
       this.stream = stream;
-      var video = this.localVideo.current;
-      if ('srcObject' in video) {
-        video.srcObject = stream;
+      if ('srcObject' in this.localVideo.current) {
+        this.localVideo.current.srcObject = stream;
       } else {
-        video.src = window.URL.createObjectURL(stream);
+        this.localVideo.current.src = window.URL.createObjectURL(stream);
       }
     };
 
@@ -56,7 +66,7 @@ export default class Main extends React.Component {
   }
 
   onStrangerDisconnect() {
-    console.log('DISCONNECT');
+    //TODO: плэйсхолдер с надписью чувак отключился нажмите далее для продолжения поиска
     this.setState({ toId: '', initiator: null });
   }
 
@@ -79,36 +89,34 @@ export default class Main extends React.Component {
       <div className="main">
         <div className="video-area">
           <div className="video remote">
-            {this.state.toId && (
+            {this.state.toId ? (
               <RemoteVideo
                 client={this.state.client}
                 toId={this.state.toId}
                 initiator={this.state.initiator}
                 stream={this.stream}
+                dimensions={this.dimensions}
+              />
+            ) : (
+              <RemoteVideoPlaceholder
+                registerOnlineUsers={this.state.client.registerOnlineUsers}
+                getOnlineUsers={this.state.client.getOnlineUsers}
+                searching={!this.state.toId && this.state.start}
               />
             )}
           </div>
-          <div className="video local">
-            <video ref={this.localVideo} height="100%" autoPlay muted={true}></video>
+          <div id="local" className="video local">
+            <video ref={this.localVideo} autoPlay muted={true}></video>
           </div>
         </div>
-        <div className="buttons-area">
-          <button
-            className="start"
-            style={{ backgroundColor: this.state.start ? '#fd4545' : '#51fd6d' }}
-            onClick={() => this.toogleStart()}
-          >
-            {this.state.start ? 'Stop' : 'Start'}
-          </button>
-          {this.state.start && (
-            <button className="next" onClick={() => this.clickNext()}>
-              <Next />
-            </button>
-          )}
-          <span>
-            connected:{' '}
-            <div className="circle" style={{ backgroundColor: this.state.toId ? '#51fd6d' : '#fd4545' }}></div>
-          </span>
+        <div className="bottom-area">
+          <Buttons
+            searching={!this.state.toId && this.state.start}
+            connected={this.state.toId ? true : false}
+            start={() => this.toogleStart()}
+            next={() => this.clickNext()}
+          />
+          <Chat client={this.state.client} />
         </div>
       </div>
     );

@@ -19,6 +19,7 @@ let searchingClients = new Set();
 
 io.on('connection', socket => {
   freeClients.add(socket.id);
+  socket.broadcast.emit('online', io.sockets.clients().server.eio.clientsCount);
 
   socket.on('message', entry => {
     const data = { sender: socket.id, msg: entry.msg };
@@ -61,6 +62,7 @@ io.on('connection', socket => {
   });
 
   socket.on('stop', toId => {
+    console.log(toId);
     freeClients.add(socket.id);
     if (toId) {
       socket.to(toId).emit('stranger disconnected');
@@ -70,8 +72,14 @@ io.on('connection', socket => {
     }
   });
 
+  socket.on('online', cb => {
+    return cb(io.sockets.clients().server.eio.clientsCount);
+  });
+
   socket.on('disconnect', () => {
     if (freeClients.has(socket.id)) return freeClients.delete(socket.id);
     if (searchingClients.has(socket.id)) return searchingClients.delete(socket.id);
+    socket.broadcast.emit('online', io.sockets.clients().server.eio.clientsCount);
+    console.log('ss');
   });
 });
