@@ -161,3 +161,10 @@ ul {
     background-color: white;
   }
 }
+
+@media screen and (max-width: 600px) {
+  .chat{
+      margin: 0;
+    
+  }
+}
