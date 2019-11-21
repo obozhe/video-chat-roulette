@@ -41,7 +41,6 @@ io.on('connection', socket => {
   socket.on('searching', toId => {
     if (toId) {
       socket.to(toId).emit('stranger disconnected');
-      socket.emit('stranger disconnected');
     } else {
       freeClients.delete(socket.id);
     }
@@ -60,7 +59,6 @@ io.on('connection', socket => {
     freeClients.add(socket.id);
     if (toId) {
       socket.to(toId).emit('stranger disconnected');
-      socket.emit('stranger disconnected');
     } else {
       searchingClients.delete(socket.id);
     }

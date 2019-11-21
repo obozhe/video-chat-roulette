@@ -31,7 +31,7 @@ export default class Main extends React.Component {
     this.getStream();
   }
 
-  componentDidUpdate() {}
+  componentDidUpdate() { }
 
   componentWillUnmount() {
     this.state.client.unRegisterCommonHandler();
@@ -42,15 +42,12 @@ export default class Main extends React.Component {
   }
 
   onStrangerDisconnect() {
-    this.setState({ toId: '', initiator: null });
-    if (this.state.start) {
-      this.setState({ disconnected: true });
-    }
+    this.setState({ toId: '', initiator: null, disconnected: true });
   }
 
   clickNext() {
-    this.setState({ disconnected: false });
     this.state.client.startSearch(this.state.toId);
+    this.setState({ toId: '', initiator: null, disconnected: false });
   }
 
   toogleStart() {
@@ -100,13 +97,13 @@ export default class Main extends React.Component {
                 stream={this.stream}
               />
             ) : (
-              <RemoteVideoPlaceholder
-                registerOnlineUsers={this.state.client.registerOnlineUsers}
-                getOnlineUsers={this.state.client.getOnlineUsers}
-                searching={!this.state.toId && this.state.start}
-                disconnected={this.state.disconnected}
-              />
-            )}
+                <RemoteVideoPlaceholder
+                  registerOnlineUsers={this.state.client.registerOnlineUsers}
+                  getOnlineUsers={this.state.client.getOnlineUsers}
+                  searching={!this.state.toId && this.state.start}
+                  disconnected={this.state.disconnected}
+                />
+              )}
           </div>
           <div id="local" className="video local">
             <div
@@ -121,24 +118,24 @@ export default class Main extends React.Component {
               }}
             >
               {this.state.localVideo ? (
-                <video ref={this.localVideo} autoPlay muted={true}></video>
+                <video ref={this.localVideo} autoPlay muted playsInline></video>
               ) : (
-                <div>
-                  <h1>
-                    we can't get your camera{' '}
-                    <span role="img" aria-label="surprised">
-                      &#128546;
+                  <div>
+                    <h1>
+                      we can't get your camera{' '}
+                      <span role="img" aria-label="surprised">
+                        &#128546;
                     </span>
-                  </h1>
-                  <h3>
-                    but you still can use this app{' '}
-                    <span role="img" aria-label="surprised">
-                      &#128527;
+                    </h1>
+                    <h3>
+                      but you still can use this app{' '}
+                      <span role="img" aria-label="surprised">
+                        &#128527;
                     </span>
-                  </h3>
-                  <h3>or try again to give us access to your camera</h3>
-                </div>
-              )}
+                    </h3>
+                    <h3>or try again to give us access to your camera</h3>
+                  </div>
+                )}
             </div>
           </div>
         </div>
