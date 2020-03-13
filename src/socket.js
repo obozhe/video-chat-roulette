@@ -1,8 +1,8 @@
 const io = require('socket.io-client');
 
 export default function () {
-  const socket = io(); //static
-  //const socket = io.connect('http://localhost:3000'); //development
+  const port = process.env.NODE_ENV==='development' ? 'http://localhost:8080' : '';
+  const socket = io.connect(port);
 
   socket.on('error', err => console.log('socket error:', err));
 
